@@ -1,0 +1,7 @@
+API1 => https://localhost:7279
+API2 => https://localhost:7065
+
+Client1 => https://localhost:7234
+Client2 => https://localhost:7217
+
+IdentityServer => https://localhost:7200
