@@ -1,7 +1,18 @@
+using IdentityServer;
+using IdentityServerHost;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddIdentityServer()
+    .AddInMemoryApiResources(Config.GetApiResources)
+    .AddInMemoryApiScopes(Config.GetApiScopes)
+    .AddInMemoryClients(Config.GetClients)
+    .AddInMemoryIdentityResources(Config.GetIdentityResources)
+    .AddTestUsers(Config.Users.ToList())
+    .AddDeveloperSigningCredential();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -17,11 +28,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseIdentityServer();
 app.UseAuthorization();
 
+app.MapDefaultControllerRoute();
+
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
 
 app.Run();
